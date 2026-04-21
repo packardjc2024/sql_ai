@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- Add the static files to the header block -->
+{% block header_extension %}
+<link rel="stylesheet" type="text/css" href='{% static "chatbot/chatbot.css" %}'>
+<script type="text/javascript" src="{% static 'chatbot/chatbot.js' %}"></script>
+{% endblock %}
+
+<!-- Add the index's content to the main header block -->
+{% block body_extension %}
+
+<div id="main-container">
+
+    <div id="results-container" class="glass-container">
+        <h3>Results</h3>
+        <div id="results">
+            <h5>SQL Query:</h5>
+            <p>{{ query }}</p>
+            <h5># Results</h5>
+            <p>{{ count }}</p>
+            <table id="results-table">
+                <tr>
+                    {% for column in columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+                {% for result in results %}
+                    <tr>
+                    {% for value in result.values %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <div id="input-container" class="glass-container">
+        <h3>Chat History</h3>
+        <div id="history">
+            {% for text in history %}
+                <p class="{% if text.user %}user{% else %}bot{% endif %}">{{ text.content }}</p>
+            {% endfor %}
+        </div>
+        <form method="post" action="{% url 'chatbot:query_db' %}">
+            {% csrf_token %}
+            <textarea id="user-input" name="user-input" placeholder="Enter your question here..."></textarea>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
