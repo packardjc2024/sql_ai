@@ -14,3 +14,5 @@ web/logs_volume/
 web/media_volume/
 web/static_volume/
 .dbenv
+web/.dbenv
+db/.dbenv
